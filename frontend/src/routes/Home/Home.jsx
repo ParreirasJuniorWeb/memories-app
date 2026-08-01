@@ -26,7 +26,7 @@ const Home = () => {
       try {
         const response = await customAxios.get("/memories");
         if(response.status === 200) {
-        setMemories(response.data);
+        setMemories(response.data.memories || []);
         console.log(response.data.msg);
         toast.success(response.data.msg);
         } else {
@@ -46,11 +46,13 @@ const Home = () => {
     <div className="home-page">
       <h2>Confira as últimas Memórias</h2>
       <div className="memories-container">
-        {memories 
-        && memories.length > 0 
+        {memories.length > 0 
         && memories.map((memory) => (
           <div className="memory" key={memory._id}>
-            <img src={`${customAxios.defaults.baseURL}${memory.src}`} alt={memory.title} />
+            <img
+              src={`${customAxios.defaults.baseURL.replace(/\/$/, "")}/${memory.src.replace(/^\//, "")}`}
+              alt={memory.title}
+            />
             <p>{memory.title}</p>
             <Link 
               className="btn" 
